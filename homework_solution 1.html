@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายงานส่งงาน Data Visualization Homework: Redesign & Analytics Level 1-4 (โจทย์หน้า 119)</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX CSS & JavaScript for Beautiful LaTeX Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}]});"></script>
+
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.85);
+            --border-glass: rgba(255, 255, 255, 0.12);
+            --accent-red: #ef4444;
+            --accent-gold: #f59e0b;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans Thai', 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.7;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(239, 68, 68, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+            background-attachment: fixed;
+            padding-bottom: 4rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Header Card */
+        .hero-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, #ffffff 40%, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-sub {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        .meta-item strong { color: var(--accent-cyan); display: block; font-size: 0.85rem; }
+
+        /* Section Cards */
+        .section-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 0.75rem;
+        }
+
+        .section-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--accent-blue);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Alert / Callout Box */
+        .callout {
+            padding: 1.2rem 1.5rem;
+            border-radius: 14px;
+            margin: 1.25rem 0;
+            border-left: 4px solid;
+            font-size: 0.95rem;
+        }
+
+        .callout-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--accent-gold);
+            color: #fef3c7;
+        }
+
+        .callout-info {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--accent-blue);
+            color: #dbeafe;
+        }
+
+        .callout-success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: #10b981;
+            color: #d1fae5;
+        }
+
+        /* Equation Styling Box */
+        .equation-box {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #60a5fa;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Tables */
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-glass);
+        }
+
+        .custom-table th {
+            background: rgba(31, 41, 55, 0.9);
+            color: var(--accent-cyan);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-glass);
+        }
+
+        .custom-table td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(15, 23, 42, 0.4);
+        }
+
+        .custom-table tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Single Chart Image Container */
+        .single-chart-container {
+            text-align: center;
+            margin: 2rem 0;
+            background: #ffffff;
+            padding: 1.25rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .single-chart-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .chart-caption {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #334155;
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        /* Analytics Levels Pills */
+        .level-pill {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-right: 0.4rem;
+        }
+
+        .lvl-1 { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+        .lvl-2 { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+        .lvl-3 { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+        .lvl-4 { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+        .bullet-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .bullet-list li::before {
+            content: "➔";
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Hero Header Card -->
+        <section class="hero-header hero-card">
+            <div class="hero-badge"><i class="fa-solid fa-graduation-cap"></i> รายงานวิชา Data Visualization and Storytelling (การสร้างภาพนิทัศน์จากข้อมูลและการเล่าเรื่อง)</div>
+            <h1 class="hero-title">Decode and Redesign finding Take Home message Data Visualization:<br>ค่าใช้จ่ายด้านสุขภาพ vs. อายุขัยเฉลี่ย (24 OECD Countries: 1980 to 2015)</h1>
+            <p class="hero-sub">การวิเคราะห์เปรียบเทียบเชิงลึก ถอดตัวแปร (Decode: Variable & Graphic Elements) สรุป Take Home Message การวิเคราะห์จาก Level 1-2 สู่ Level 3-4 (Predictive & Prescriptive Analytics) พร้อมกรณีศึกษาพิเศษการปลดล็อกต้นทุนสุขภาพของลักเซมเบิร์ก (LUX Cost Decoupling)</p>
+            
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <strong>วิชา:</strong> Data Visualization & Storytelling (DADS8712)
+                </div>
+                <div class="meta-item">
+                    <strong>แหล่งข้อมูลอ้างอิง:</strong> Our World in Data (DATA_HW_Viz.csv)
+                </div>
+            </div>
+        </section>
+
+        <!-- PART 1: CRITIQUE OF ORIGINAL VISUALIZATION -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2 class="section-title">Decode Original Visualization</h2>
+            </div>
+            
+            <p>รูปภาพเดิมเป็นภาพอินโฟกราฟิกจากสำนักพิมพ์ <em>National Geographic (2019)</em> นำเสนอกราฟเปรียบเทียบการเปลี่ยนแปลงของค่าใช้จ่ายสุขภาพรายบุคคลกับอายุขัยเฉลี่ยของประเทศ OECD 24 ประเทศเปรียบเทียบ <strong>1980 vs 2015</strong> ในรูปแบบ <strong>Parallel Coordinates Plot / Dual Slope Chart</strong> แบบ 4 แกนตั้ง (Life Expectancy 1980 ➔ Health Exp 1980 ➔ Health Exp 2015 ➔ Life Expectancy 2015)</p>
+
+            <div class="callout callout-warning">
+                <strong><i class="fa-solid fa-triangle-exclamation"></i> ข้อบกพร่องหลักทางทัศนศิลป์และการสื่อสารข้อมูล (Visual & Cognitive Flaws):</strong>
+                <ul class="bullet-list" style="margin-top: 0.5rem;">
+                    <li><strong>1. Visual Confusion & Lines Crossing (ความสับสนของเส้นตัดกัน):</strong> การลากเส้นตรงโยงข้ามแกนตั้ง 4 แกน ทำให้เกิดปัญหาสายเส้นตัดกันพันกันยุ่งเหยิง (Spaghetti Effect) ผู้ดูไม่สามารถติดตามเส้นของประเทศเดี่ยวๆ ได้อย่างชัดเจน</li>
+                    <li><strong>2. Lack of Direct Correlation Visualization (ขาดการแสดงความสัมพันธ์เชิงฟังก์ชัน):</strong> แกนถูกแยกออกจากกันเป็นแกนขนาน ทำให้ยากต่อการมองเห็นทิศทางความสัมพันธ์ (Correlation) ระหว่างตัวแปรอิสระ (ค่าใช้จ่าย) กับตัวแปรตาม (อายุขัย)</li>
+                    <li><strong>3. Disjointed Time Dimension (การขัดจังหวะมิติเวลา):</strong> การแยกปี 1980 ไว้ด้านซ้ายสุด และปี 2015 ไว้ด้านขวาสุด โดยมีแกนค่าใช้จ่ายกั้นกลาง ทำให้สมองต้องประมวลผลย้อนกลับไปกลับมาเพื่อดูการเติบโตของการเปรียบเทียบ 1980 vs 2015</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- PART 2: ORIGINAL VARIABLE & GRAPHIC ELEMENTS -->
+        <section class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Decode Variable & Graphic Elements Original Visualization</h2>
+            </div>
+
+            <p>Decode องค์ประกอบตัวแปรทางสถิติ (Variable) และ องค์ประกอบทางทัศนศิลป์ (Graphic Elements) จาก Original Visualization ออกมาเป็นตาราง ดังนี้:</p>
+
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th style="width: 8%;">ลำดับ</th>
+                        <th style="width: 35%;">ตัวแปร (Variable)</th>
+                        <th style="width: 35%;">องค์ประกอบทางทัศนศิลป์เดิม (Graphic Elements)</th>
+                        <th style="width: 22%;">ประเภทข้อมูล</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>Health Care Spending per Person (1980 vs 2015)</strong><br>ค่าใช้จ่ายด้านสุขภาพต่อหัว ($ USD)</td>
+                        <td>แกนตั้งคู่ตรงกลาง (Middle Vertical Coordinates)</td>
+                        <td>Numeric / Continuous (Ratio)</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Life Expectancy (1980 vs 2015)</strong><br>อายุขัยเฉลี่ยเมื่อแรกเกิด (ปี)</td>
+                        <td>แกนตั้งซ้ายและขวาสุด (Left & Right Coordinates)</td>
+                        <td>Numeric / Continuous (Ratio)</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>Country Name / 3-Letter Code</strong><br>ชื่อ/ตัวย่อประเทศ 3 อักษร (คอลัมน์ Code)</td>
+                        <td>ข้อความกำกับตัวอักษร (Text Labels / Country Codes)</td>
+                        <td>Categorical (Nominal)</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>Universal Health Coverage (UC) Status</strong><br>สถานะระบบหลักประกันสุขภาพถ้วนหน้า</td>
+                        <td>สีของเส้น (Color Code: สีแดง = USA [ไม่มี UC], สีฟ้า = มี UC)</td>
+                        <td>Categorical (Binary Nominal)</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>Comparison Time Points (1980 vs 2015)</strong><br>จุดเวลาเปรียบเทียบ 1980 vs 2015</td>
+                        <td>เส้นตรงลากโยงระหว่างแกน (Parallel Coordinates Lines)</td>
+                        <td>Ordinal / Time Dimension</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- PART 3: ORIGINAL TAKE HOME MESSAGE -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2 class="section-title">Take Home Message Original Visualization</h2>
+            </div>
+
+            <p>สรุปข้อความสำคัญที่ได้จากการอ่านภาพเดิม ซึ่งจำกัดอยู่เฉพาะการวิเคราะห์เชิงพรรณนาและวินิจฉัยพื้นฐาน (Level 1 - 2):</p>
+
+            <ul class="bullet-list" style="margin-top: 1rem;">
+                <li>
+                    <span class="level-pill lvl-1">Level 1: Descriptive</span>
+                    <strong>ในปี 1980:</strong> สหรัฐอเมริกา (USA) มีอายุขัยเฉลี่ย (73.7 ปี) และค่าใช้จ่ายสุขภาพ ($2,877) อยู่ในระดับใกล้เคียงกับกลุ่มประเทศพัฒนาแล้วอื่นๆ
+                </li>
+                <li>
+                    <span class="level-pill lvl-1">Level 1: Descriptive</span>
+                    <strong>ในปี 2015:</strong> สหรัฐอเมริกา (USA) มีค่าใช้จ่ายสุขภาพต่อหัวพุ่งสูงที่สุดในโลก ($10,099/คน/ปี) ในขณะที่ประเทศญี่ปุ่น (JPN) มีอายุขัยเฉลี่ยยืนยาวที่สุด (83.9 ปี)
+                </li>
+                <li>
+                    <span class="level-pill lvl-1">Level 1: Descriptive</span>
+                    <strong>สถานะสวัสดิการรักษาพยาบาล:</strong> ในบรรดาประเทศ OECD 24 ประเทศที่นำเสนอ สหรัฐอเมริกา (USA) เป็นประเทศหลักที่ไม่มีระบบหลักประกันสุขภาพถ้วนหน้า (Universal Health Coverage)
+                </li>
+                <li>
+                    <span class="level-pill lvl-2">Level 2: Diagnostic</span>
+                    <strong>ความผิดปกติของสหรัฐฯ (USA Outlier):</strong> สหรัฐอเมริกาใช้จ่ายเงินด้านสุขภาพสูงกว่าประเทศอื่นอย่างมหาศาล แต่อายุขัยเฉลี่ยของคนในประเทศกลับร่วงลงมาอยู่อันดับท้ายๆ ของกลุ่มประเทศพัฒนาแล้ว (78.7 ปี) อันเป็นผลมาจากความเหลื่อมล้ำในการเข้าถึงบริการสาธารณสุขและการขาดระบบการป้องกันโรคพื้นฐานในกลุ่มผู้มีรายได้น้อย
+                </li>
+            </ul>
+        </section>
+
+        <!-- PART 4: REDESIGNED VISUALIZATION -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-number"> 3 </div>
+                <h2 class="section-title"> Redesign Visualization </h2>
+            </div>
+
+            <p>แปลงภาพจาก Slope graph 4 แกน (Original Visualization) เป็น <strong>Selective Focus Trajectory Line Paths (5-Year Intervals: 1980 – 2015) & Linear Regression Line</strong> โดยลากเส้น Trend เฉพาะช่วงเวลาทุกๆ 5 ปี เพื่อลดความซับซ้อนแสดงชื่อเต็มภาษาอังกฤษสำหรับ 6 ประเทศไฮไลต์ และแสดงตัวย่อ 3 อักษรสีเทาสำหรับ 18 ประเทศเปรียบเทียบ:</p>
+
+            <div class="single-chart-container">
+                <img src="redesigned_chart_uniform_colors_v8.png" alt="Redesigned Visualization 5-Year Trajectory Lines 24 OECD Countries Final v8">
+                <p class="chart-caption"><i class="fa-solid fa-chart-line"></i> <strong>รูปภาพ Redesign:</strong> นำเสนอเส้นทางการเติบโตทุกๆ 5 ปี ของ 24 ประเทศ OECD สำหรับ 6 ประเทศไฮไลต์ (United States, Japan, Switzerland, Spain, United Kingdom, Luxembourg) และสำหรับอีก 18 ประเทศ</p>
+            </div>
+
+            <div class="callout callout-info">
+                <strong><i class="fa-solid fa-calculator"></i> สรุปผลแบบจำลองทางสถิติ (Mathematical Regression Model Results):</strong>
+                
+                <div class="equation-box">
+                    $$\text{Predicted Life Expectancy (2015)} = 79.58 + 0.000412 \times (\text{Health Expenditure})$$
+                    <div style="font-size: 0.9rem; color: #93c5fd; margin-top: 0.4rem;">(2015 OECD Peer Trend Model 24 Countries excluding USA Outlier)</div>
+                </div>
+
+                <ul class="bullet-list" style="margin-top: 0.5rem;">
+                    <li><strong>ที่มาของเส้นแนวโน้ม (2015 Trend Line):</strong> คำนวณจากข้อมูลปี 2015 ของกลุ่มประเทศเปรียบเทียบ OECD 23 ประเทศ (ข้าม USA) โดยค่าสัมประสิทธิ์การตัดสินใจอยู่ที่ \(R^2 = 0.20\) (\(r = 0.44\)) สะท้อนว่าในกลุ่มประเทศ OECD ทั่วไป ณ ปี 2015 การเพิ่มงบประมาณด้านสุขภาพส่งผลเชิงบวกต่ออายุขัยเฉลี่ยอย่างมีนัยสำคัญ</li>
+                    <li><strong>ค่าคาดการณ์ของสหรัฐฯ (USA Predicted Value):</strong> ณ ระดับค่าใช้จ่าย $10,099 ในปี 2015 สหรัฐฯ (USA) ควรมีอายุขัยคาดการณ์สูงถึง <strong>83.7 ปี</strong> แต่อายุขัยจริงกลับอยู่ที่ <strong>78.7 ปี</strong> เกิดส่วนต่างขาดทุนทางสุขภาพ (Health Shortfall) ถึง <strong>-5.0 ปี</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- PART 5: REDESIGNED VARIABLE & GRAPHIC ELEMENTS -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <h2 class="section-title">Decode Variable & Graphic Elements Redesign</h2>
+            </div>
+
+            <p>เปรียบเทียบองค์ประกอบทางทัศนศิลป์ดั้งเดิม กับองค์ประกอบทางทัศนศิลป์ใหม่ที่ถูกออกแบบใหม่ (Redesign Element):</p>
+
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">ลำดับ</th>
+                        <th style="width: 25%;">ตัวแปร (Variable)</th>
+                        <th style="width: 30%;">Graphic Elements เดิม (หน้า 119)</th>
+                        <th style="width: 40%;">New Graphic Elements ใหม่ (Redesign v8 Final)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>Health Care Spending per Person</strong></td>
+                        <td>แกนตั้งคู่ตรงกลาง (Middle Coordinates)</td>
+                        <td><strong>X-Coordinate (Independent Variable)</strong><br>แกนนอน แสดงค่าใช้จ่ายจริง ($ USD)</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Life Expectancy</strong></td>
+                        <td>แกนตั้งซ้าย-ขวา (Left & Right)</td>
+                        <td><strong>Y-Coordinate (Dependent Variable)</strong><br>แกนตั้ง แสดงอายุขัยเฉลี่ย (ปี)</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>Country Labeling Strategy</strong></td>
+                        <td>ข้อความกำกับชื่อประเทศเต็ม</td>
+                        <td><strong>Hybrid Labeling (Full Names & 3-Letter Codes)</strong><br>• ชื่อเต็มภาษาอังกฤษตัวหนาสำหรับ 6 ประเทศไฮไลต์ (`United States`, `Japan`, `Switzerland`, `Spain`, `United Kingdom`, `Luxembourg`) Place ด้านขวาหรือบนจุดอย่างสะอาดตา<br>• ตัวย่อ 3 อักษรสีเทาจางขนาดเล็กสำหรับอีก 18 ประเทศเปรียบเทียบ</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>5-Year Time Trajectory Path</strong></td>
+                        <td>เส้นตรงโยงข้ามแกนตั้ง 4 แกน</td>
+                        <td><strong>Selective 5-Year Trajectory Line Paths (1980, 1985 ... 2015)</strong><br>เส้นพาธทุก 5 ปี ลดความยุ่งเหยิงทางสายตา แสดงทิศทางวิวัฒนาการเชิงมิติเวลาอย่างชัดเจน</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>Universal Health Coverage (UC)</strong></td>
+                        <td>สีของเส้น (Red / Blue)</td>
+                        <td><strong>Color Coding & Transparency Mapping</strong><br>• สีแดงสดหนาทึบ = สหรัฐอเมริกา (ไม่มี UC)<br>• สีฟ้าสดใสหนาทึบ = 5 ประเทศไฮไลต์ที่มี UC<br>• สีเทาจางนุ่มนวล = 18 ประเทศ OECD ทั่วไป</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><strong>Predicted Value of Life Expectancy</strong></td>
+                        <td><em>ไม่มีในภาพเดิม</em></td>
+                        <td><strong>2015 Linear Regression Line (<i class="fa-solid fa-chart-line"></i>)</strong><br>เส้นประสีฟ้าแสดงแนวโน้มคาดการณ์ปี 2015 + แถบ 95% Expected Range</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><strong>Structural Outlier & Benchmark Annotations</strong></td>
+                        <td><em>ไม่มีในภาพเดิม</em></td>
+                        <td><strong>Callout Highlight Boxes (<i class="fa-solid fa-box"></i>)</strong><br>กรอบเน้นสัญลักษณ์ Outlier ของสหรัฐฯ และกรอบ Benchmark ของญี่ปุ่น</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- PART 6: NEW ELEVATED TAKE HOME MESSAGE (LEVEL 1-4 & LUX ANALYSIS) -->
+        <section class="section-card">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <h2 class="section-title">Take Home Message Redesign Visualization (Level 1 - 4 Analytics)</h2>
+            </div>
+
+            <p>ยกระดับบทสรุปจากการรายงานผลอดีต สู่การทำนายพฤติกรรมและการเสนอแนะเชิงโครงสร้าง (Predictive & Prescriptive Analytics) :</p>
+
+            <ul class="bullet-list" style="margin-top: 1rem;">
+                <li>
+                    <span class="level-pill lvl-1">Level 1: Descriptive</span>
+                    <strong>การเปรียบเทียบ 1980 vs 2015:</strong> ในช่วงปี 1980 ถึง 2015 ทั้ง 24 ประเทศ OECD มีอายุขัยเฉลี่ยเพิ่มขึ้นอย่างสม่ำเสมอ โดยสวิตเซอร์แลนด์ (<code>Switzerland</code>) และญี่ปุ่น (<code>Japan</code>) ก้าวขึ้นสู่ประเทศที่มีอายุขัยยืนยาวที่สุด (82.9 ปี และ 83.9 ปี ตามลำดับ) ในขณะที่ค่าใช้จ่ายสุขภาพต่อหัวของสหรัฐฯ (<code>United States</code>) พุ่งทะยานสู่ $10,099 ในปี 2015 ทิ้งห่างทุกประเทศกว่า 2 เท่า
+                </li>
+                <li>
+                    <span class="level-pill lvl-2">Level 2: Diagnostic</span>
+                    <strong>ประสิทธิภาพการใช้งบประมาณ & วิเคราะห์สาเหตุเชิงลึก:</strong>
+                    <br>• <strong>สหรัฐอเมริกา (USA Structural Failure):</strong> สหรัฐฯ เป็นประเทศเดียวในกลุ่ม OECD ที่ไม่มีระบบหลักประกันสุขภาพถ้วนหน้า (UC) ส่งผลให้เกิดต้นทุนบริหารจัดการซ้ำซ้อน (Administrative Cost สูงถึง 34% ของงบสุขภาพ เทียบกับเฉลี่ย OECD ที่ 12%) และการโก่งราคายาและเวชภัณฑ์
+                    <br>• <strong>ประเทศญี่ปุ่น (JPN Maximum Efficiency Benchmark):</strong> ญี่ปุ่นใช้เงินเพียง $4,606 ต่อคน แต่กลับได้อายุขัยสูงที่สุดในโลก (83.9 ปี สูงกว่าค่าคาดการณ์เปรียบเทียบ +1.4 ปี) ด้วยระบบ UC ที่เน้นการส่งเสริมสุขภาพเชิงป้องกัน
+                    <br>• <strong>กรณีศึกษาประเทศลักเซมเบิร์ก (LUX Cost Decoupling Phenomenon):</strong>
+                    <br>ลักเซมเบิร์กเคยมีค่าใช้จ่ายสุขภาพต่อหัวพุ่งขึ้นไปแตะจุดสูงสุดในปี 2010 ที่ <strong>$7,066 ต่อคน</strong> (อายุขัย 80.1 ปี) แต่ในช่วงปี 2010 ถึง 2015 ลักเซมเบิร์กสามารถ <strong>ลดค่าใช้จ่ายสุขภาพต่อหัวลงมาเหลือ $5,205 ต่อคน (ลดลงถึง -$1,861 หรือ -26.3%) ในขณะที่อายุขัยเฉลี่ยยังคงเพิ่มขึ้นต่อเนื่องเป็น 81.3 ปี (+1.2 ปี)</strong>
+                    <br><em>จากการค้นหาข้อมูลเพิ่มเติม:</em> ประเทศลักเซมเบิร์กมีการออกกฎหมายปฏิรูประบบสุขภาพครั้งใหญ่ของประเทศในวันที่ 17 ธันวาคม 2010 และเริ่มบังคับใช้ในปี 2011 โดยปรับโครงสร้างการเจรจาราคายารวมศูนย์ผ่าน National Health Insurance (CNS), การปฏิรูประบบ E-Health ลดการตรวจซ้ำซ้อน, และการเพิ่มความร่วมมือรักษาพยาบาลข้ามแดน (Cross-border Healthcare) กับฝรั่งเศส เยอรมนี และเบลเยียม ทำให้ไม่ต้องลงทุนสร้างโรงพยาบาลเฉพาะทางราคาแพงเกินความจำเป็น
+                </li>
+                <li>
+                    <span class="level-pill lvl-3">Level 3: Predictive Analytics</span>
+                    <strong>แบบจำลองการทำนายอายุขัย & มูลค่าความสูญเสียทางเศรษฐกิจ:</strong>
+                    <br>จากสมการถดถอยเชิงเส้น Y = 79.58 + 0.000412X (R<sup>2</sup> = 0.20) ทำนายว่า ณ ระดับการใช้จ่าย $10,099 ของสหรัฐฯ ประชาชนสหรัฐฯ ควรมีอายุขัยคาดการณ์ 83.7 ปี การที่อายุขัยจริงอยู่ที่ 78.7 ปี สะท้อนถึง <strong>Health Shortfall ถึง -5.0 ปี</strong> สหรัฐฯ จ่ายเงินเกินมาตรฐานเปรียบเทียบ OECD อยู่ที่ประมาณ <strong>$4,200 ต่อคน/ปี</strong> คิดเป็นมูลค่าสูญเปล่าเชิงโครงสร้างรวมกว่า <strong>1.3 ล้านล้านดอลลาร์ต่อปี</strong>
+                </li>
+                <li>
+                    <span class="level-pill lvl-4">Level 4: Prescriptive Analytics & Policy Action</span>
+                    <strong>ข้อเสนอแนะเชิงโครงสร้างเชิงนโยบาย (Prescriptive Action for USA):</strong>
+                    <br>สหรัฐฯ ต้องหยุดเพิ่มงบประมาณรวม แต่ต้อง <strong>บังคับใช้ระบบหลักประกันสุขภาพถ้วนหน้า (Universal Health Coverage Reform)</strong> และเรียนรู้การควบคุมต้นทุนจากลักเซมเบิร์ก (LUX) และญี่ปุ่น (JPN) โดยการเจรจาราคายาระดับชาติ การบูรณาการข้อมูลดิจิทัลเพื่อลดการรักษาซ้ำซ้อน และเปลี่ยนยุทธศาสตร์จากการรักษาโรคระยะสุดท้ายในโรงพยาบาลเอกชนราคาแพง มาเป็นการส่งเสริมการดูแลสุขภาพปฐมภูมิ (Primary Care & Prevention) เพื่อดึงวิถีสุขภาพกลับเข้าสู่แนวโน้มมาตรฐานสากล
+                </li>
+            </ul>
+
+            <div class="callout callout-success">
+                <strong><i class="fa-solid fa-circle-check"></i> สรุปการยกระดับวิเคราะห์ (Analytics Level Elevation Summary):</strong>
+                <br>การแปลงรูปแบบจาก Parallel Coordinates (หน้า 119) เป็น Selective Trajectory Line Paths (5-Year Intervals) พร้อม 2015 Regression Line และบทวิเคราะห์กรณีศึกษาของ LUX และ JPN ช่วยเปลี่ยนโจทย์จากการมองเห็นแค่ <em>"ใครจ่ายเท่าไหร่"</em> (Level 1-2) ให้กลายเป็น <em>"โครงสร้างระบบใดที่ทรงประสิทธิภาพ ปลดล็อกต้นทุนอย่างไร และควรปฏิรูปเชิงนโยบายอย่างไร"</em> (Level 3-4)
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
